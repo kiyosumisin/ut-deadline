@@ -3,11 +3,11 @@
 import os, sys, json, time, urllib.request, urllib.parse
 
 API = "https://courses.ut.edu.vn/webservice/rest/server.php"
-# Cloudflare đứng trước Moodle và chặn thẳng User-Agent "Python-urllib/..." bằng
-# trang "Just a moment..." kèm HTTP 403 — token đúng cũng không tới nơi.
-# Đo 22/09/2026: cùng request, chỉ đổi UA -> 403 thành 200. Đừng bỏ dòng này.
-UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/141.0 Safari/537.36")
+# Cloudflare đứng trước Moodle chặn danh sách UA bot có sẵn (rỗng, python-urllib,
+# curl) bằng trang "Just a moment..." kèm 403. Một UA tự khai tên thì qua bình thường
+# — đo 22/09/2026. Nên KHÔNG giả làm Chrome: không cần, và nói thật thì khi quản trị
+# viên soi log họ thấy ngay đây là ai, chạy cái gì, chứ không phải một trình duyệt lạ.
+UA = "UT-Deadline/1.0 (doc lich ca nhan qua Moodle web service)"
 NGAY_TRUOC = int(os.environ.get("NGAY_TRUOC", "3"))
 
 
