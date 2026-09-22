@@ -68,6 +68,12 @@ Repo fork → **Settings** → **Secrets and variables** → **Actions** →
 | `DISCORD_WEBHOOK` | — | URL webhook |
 | `TELEGRAM_TOKEN` | — | chuỗi BotFather, dạng `123456789:AAH...` |
 | `TELEGRAM_CHAT` | — | dãy số `chat_id` |
+| `DISCORD_TAG` | — | tag bạn để đẩy thông báo, dạng `<@123456789012345678>` |
+| `TELEGRAM_TAG` | — | tag trong tin Telegram |
+
+Lấy ID Discord: Cài đặt → Nâng cao → bật **Chế độ nhà phát triển**, rồi chuột
+phải avatar mình → **Sao chép ID người dùng**. Phải bọc trong `<@` và `>`, dán
+trần dãy số thì Discord hiện ra text chứ không ping.
 
 Phải có `MOODLE_TOKEN` và **ít nhất một** nơi nhận, không thì workflow báo đỏ
 ngay thay vì lặng lẽ xanh.
@@ -85,9 +91,9 @@ Sửa trong `.github/workflows/deadline.yml`:
 | Biến | Mặc định | Nghĩa |
 |---|---|---|
 | `NGAY_TRUOC` | `"7"` | nhìn trước bao nhiêu ngày |
-| `DISCORD_TAG` | `""` | tag bạn trong tin Discord, dạng `<@123456789>` |
-| `TELEGRAM_TAG` | `""` | tag trong tin Telegram |
 | `cron` | `0 0 * * *` | giờ chạy, tính theo UTC (`0 0` = 07:00 giờ VN) |
+
+Hai tag nằm ở Secrets chứ không ở file này, xem bảng bước 4.
 
 ## Cấu trúc
 

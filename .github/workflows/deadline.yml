@@ -17,7 +17,8 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
           NGAY_TRUOC: "7"
-          # Tag chính bạn. Lấy ID: Discord -> Cài đặt -> Nâng cao -> bật Chế độ
-          # nhà phát triển, rồi chuột phải avatar mình -> Sao chép ID người dùng.
-          # Điền dạng <@123456789012345678>. Để rỗng là không tag ai.
-          DISCORD_TAG: ""
+          # Tag để tin nhắn đẩy được thông báo. Để trong Secrets chứ không viết
+          # thẳng vào đây: người fork khỏi phải sửa file, và ID cá nhân không
+          # nằm trong repo public. Không đặt thì không tag ai.
+          DISCORD_TAG: ${{ secrets.DISCORD_TAG }}
+          TELEGRAM_TAG: ${{ secrets.TELEGRAM_TAG }}
