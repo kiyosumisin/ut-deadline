@@ -3,6 +3,11 @@
 import os, sys, json, time, urllib.request, urllib.parse
 
 API = "https://courses.ut.edu.vn/webservice/rest/server.php"
+# Cloudflare đứng trước Moodle và chặn thẳng User-Agent "Python-urllib/..." bằng
+# trang "Just a moment..." kèm HTTP 403 — token đúng cũng không tới nơi.
+# Đo 22/09/2026: cùng request, chỉ đổi UA -> 403 thành 200. Đừng bỏ dòng này.
+UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/141.0 Safari/537.36")
 NGAY_TRUOC = int(os.environ.get("NGAY_TRUOC", "3"))
 
 
@@ -20,8 +25,16 @@ def goi(token):
         "wsfunction": "core_calendar_get_calendar_upcoming_view",
         "courseid": 1, "categoryid": 0,
     })
-    with urllib.request.urlopen(API, q.encode(), timeout=30) as r:
-        return json.load(r)
+    req = urllib.request.Request(API, q.encode(), {"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        raw = r.read()
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        # Cloudflare cũng có lúc trả 200 kèm trang chặn. Nói thẳng ra là bị chặn,
+        # đừng để nó nổ thành lỗi parse khó hiểu.
+        raise SystemExit("Không nhận được JSON, nhiều khả năng bị Cloudflare chặn: "
+                         + raw[:200].decode("utf-8", "replace"))
 
 
 def loc(d, tu, den):
