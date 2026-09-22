@@ -82,7 +82,7 @@ ngay thay vì lặng lẽ xanh.
 
 **Actions** → `deadline` → **Run workflow**. Log in `N deadline -> discord`.
 
-Xong. 07:00 mỗi sáng nó tự chạy.
+Xong. 07:00 và 19:00 mỗi ngày nó tự chạy.
 
 ## Chỉnh
 
@@ -91,7 +91,7 @@ Sửa trong `.github/workflows/deadline.yml`:
 | Biến | Mặc định | Nghĩa |
 |---|---|---|
 | `NGAY_TRUOC` | `"7"` | nhìn trước bao nhiêu ngày |
-| `cron` | `0 0 * * *` | giờ chạy, tính theo UTC (`0 0` = 07:00 giờ VN) |
+| `cron` | `0 0,12 * * *` | giờ chạy theo UTC — `0,12` = 07:00 và 19:00 giờ VN |
 
 Hai tag nằm ở Secrets chứ không ở file này, xem bảng bước 4.
 
@@ -137,8 +137,10 @@ mà không ai biết — kiểu hỏng tệ nhất cho thứ cài để khỏi p
 - Cron GitHub hay trễ 5–30 phút, lúc đông có khi bỏ một nhịp.
 - GitHub tắt lịch sau 60 ngày repo không có commit. Vào Actions bấm Run
   workflow một phát là sống lại.
-- Cùng một deadline được nhắc lại mỗi sáng cho tới khi qua hạn. Cố ý — nhắc
-  một lần rồi thôi thì đúng hôm bận là trôi mất.
+- Cùng một deadline được nhắc lại **mỗi lần chạy** cho tới khi qua hạn. Với
+  `NGAY_TRUOC=7` và 2 lần/ngày thì một deadline bị nhắc tới 14 lần. Cố ý —
+  nhắc một lần rồi thôi thì đúng hôm bận là trôi mất. Thấy loãng thì giảm
+  `NGAY_TRUOC` trước khi nghĩ tới chuyện chống trùng.
 
 ## Riêng tư
 

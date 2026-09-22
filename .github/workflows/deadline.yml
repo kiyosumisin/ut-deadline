@@ -1,7 +1,7 @@
 name: deadline
 on:
   schedule:
-    - cron: "0 0 * * *"        # 07:00 giờ VN
+    - cron: "0 0,12 * * *"     # 07:00 và 19:00 giờ VN (UTC+7)
   workflow_dispatch:            # bấm tay, và giữ lịch sống qua mốc 60 ngày
 jobs:
   bao:
