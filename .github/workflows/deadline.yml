@@ -12,7 +12,10 @@ jobs:
       - run: python deadline.py
         env:
           MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
+          # Đích nào không đặt secret thì tự bỏ qua. Không đặt cái nào là báo lỗi.
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
           NGAY_TRUOC: "7"
           # Tag chính bạn. Lấy ID: Discord -> Cài đặt -> Nâng cao -> bật Chế độ
           # nhà phát triển, rồi chuột phải avatar mình -> Sao chép ID người dùng.
