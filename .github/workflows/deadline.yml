@@ -13,7 +13,7 @@ jobs:
         env:
           MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          NGAY_TRUOC: "3"
+          NGAY_TRUOC: "7"
           # Tag chính bạn. Lấy ID: Discord -> Cài đặt -> Nâng cao -> bật Chế độ
           # nhà phát triển, rồi chuột phải avatar mình -> Sao chép ID người dùng.
           # Điền dạng <@123456789012345678>. Để rỗng là không tag ai.
