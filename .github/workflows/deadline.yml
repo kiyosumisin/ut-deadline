@@ -1,7 +1,9 @@
 name: deadline
 on:
   schedule:
-    - cron: "0 0,12 * * *"     # 07:00 và 19:00 giờ VN (UTC+7)
+    # Hai nhịp, hai mục đích khác nhau — cron tính theo UTC, +7 ra giờ VN.
+    - cron: "0 0 * * *"         # 07:00 VN — bản tin tuần, để lên kế hoạch
+    - cron: "0 12 * * *"        # 19:00 VN — chuông báo gấp, đêm nay phải nộp gì
   workflow_dispatch:            # bấm tay, và giữ lịch sống qua mốc 60 ngày
 jobs:
   bao:
@@ -16,7 +18,10 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
-          NGAY_TRUOC: "1"
+          # Cửa sổ tùy nhịp: nhịp tối nhìn 1 ngày, còn lại (nhịp sáng và bấm
+          # tay) nhìn 7 ngày. Chuỗi cron ở đây phải khớp TỪNG KÝ TỰ với dòng
+          # cron bên trên, lệch một dấu cách là lẳng lặng rơi về 7.
+          NGAY_TRUOC: ${{ github.event.schedule == '0 12 * * *' && '1' || '7' }}
           # Tag để tin nhắn đẩy được thông báo. Để trong Secrets chứ không viết
           # thẳng vào đây: người fork khỏi phải sửa file, và ID cá nhân không
           # nằm trong repo public. Không đặt thì không tag ai.

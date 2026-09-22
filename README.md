@@ -1,6 +1,6 @@
 # UT Deadline
 
-Sáng 7h và tối 7h lấy deadline sắp tới trên `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
+Sáng 7h gửi bản tin 7 ngày tới, tối 7h gửi chuông báo 24h tới — lấy từ `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
 vào Discord hoặc Telegram. Chạy bằng GitHub Actions, không cần server, không cần
 máy bạn bật.
 
@@ -90,8 +90,19 @@ Sửa trong `.github/workflows/deadline.yml`:
 
 | Biến | Mặc định | Nghĩa |
 |---|---|---|
-| `NGAY_TRUOC` | `"1"` | nhìn trước bao nhiêu ngày |
-| `cron` | `0 0,12 * * *` | giờ chạy theo UTC — `0,12` = 07:00 và 19:00 giờ VN |
+| `cron` | `0 0` và `0 12` | giờ chạy theo UTC = 07:00 và 19:00 giờ VN |
+| `NGAY_TRUOC` | `7` sáng, `1` tối | nhìn trước bao nhiêu ngày |
+
+Cửa sổ đổi theo nhịp: nhịp tối nhìn 1 ngày, nhịp sáng và bấm tay nhìn 7 ngày.
+
+```yaml
+NGAY_TRUOC: ${{ github.event.schedule == '0 12 * * *' && '1' || '7' }}
+```
+
+Chuỗi cron trong dòng đó phải khớp **từng ký tự** với dòng `cron` bên trên. Lệch
+một dấu cách là so sánh trượt và mọi nhịp đều rơi về 7 — không báo lỗi gì cả, chỉ
+im lặng sai. Log mỗi lần chạy có in cửa sổ thực tế để đối chiếu:
+`2 deadline (cua so 1 ngay) -> discord`.
 
 Hai tag nằm ở Secrets chứ không ở file này, xem bảng bước 4.
 
@@ -137,13 +148,9 @@ mà không ai biết — kiểu hỏng tệ nhất cho thứ cài để khỏi p
 - Cron GitHub hay trễ 5–30 phút, lúc đông có khi bỏ một nhịp.
 - GitHub tắt lịch sau 60 ngày repo không có commit. Vào Actions bấm Run
   workflow một phát là sống lại.
-- Cùng một deadline được nhắc lại **mỗi lần chạy** cho tới khi qua hạn. Với
-  `NGAY_TRUOC=1` và 2 lần/ngày thì mỗi deadline được nhắc 2 lần, cách nhau
-  12 tiếng. Cố ý không chống trùng: nhắc một lần rồi thôi thì đúng lúc bận là
-  trôi mất.
-- Cửa sổ 1 ngày biến bot thành **chuông báo gấp**, không phải công cụ lên kế
-  hoạch. Bài lớn thầy giao trước cả tuần thì tối hôm trước mới nghe thấy. Cần
-  nhìn xa thì tăng `NGAY_TRUOC`, đổi lại mỗi deadline bị nhắc nhiều lần hơn.
+- Bot **không nhớ đã gửi gì**, mỗi lần chạy liệt kê lại toàn bộ cửa sổ. Nên một
+  deadline xuất hiện trong 7 bản tin sáng cộng 2 bản tin tối. Cố ý: nhắc một lần
+  rồi thôi thì đúng lúc bận là trôi mất.
 
 ## Riêng tư
 

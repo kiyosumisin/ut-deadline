@@ -94,4 +94,7 @@ if __name__ == "__main__":
     now = int(time.time())
     ds = loc(goi(os.environ["MOODLE_TOKEN"]), now, now + NGAY_TRUOC * 86400)
     da_gui = [m.TEN for m in DICH if ds and m.gui(ds, now)]
-    print(f"{len(ds)} deadline -> {', '.join(da_gui) or 'khong gui'}")
+    # In cả cửa sổ: workflow đổi NGAY_TRUOC theo nhịp cron, nhìn log mới biết
+    # nhịp nào vừa chạy và nó có nhận đúng giá trị không.
+    print(f"{len(ds)} deadline (cua so {NGAY_TRUOC} ngay) "
+          f"-> {', '.join(da_gui) or 'khong gui'}")
