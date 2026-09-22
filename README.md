@@ -1,6 +1,6 @@
 # UT Deadline
 
-Mỗi sáng lấy deadline sắp tới trên `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
+Sáng 7h và tối 7h lấy deadline sắp tới trên `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
 vào Discord hoặc Telegram. Chạy bằng GitHub Actions, không cần server, không cần
 máy bạn bật.
 
@@ -55,7 +55,7 @@ cho tin nhắn riêng.
 `/start` cho bot vừa tạo (bot không mở lời trước được), rồi mở
 `https://api.telegram.org/bot<TOKEN>/getUpdates` và tìm `"chat":{"id":...`.
 
-Đặt cả hai cũng được, mỗi sáng nhận hai tin.
+Đặt cả hai cũng được, mỗi lần chạy nhận hai tin giống nhau.
 
 ### 4. Nạp secret
 
