@@ -54,7 +54,10 @@ def tin(ds):
     dong = [f"• [**{ten}**]({url}) — {mon} — <t:{han}:R>" if url
             else f"• **{ten}** — {mon} — <t:{han}:R>"
             for han, ten, mon, url in ds]
-    return f"⏰ {len(ds)} deadline trong {NGAY_TRUOC} ngày tới:\n" + "\n".join(dong)
+    # Đọc env tại chỗ chứ không ở đầu file, để tu_kiem() bật tắt được.
+    tag = os.environ.get("DISCORD_TAG", "").strip()
+    return ((tag + " ") if tag else "") + \
+        f"⏰ {len(ds)} deadline trong {NGAY_TRUOC} ngày tới:\n" + "\n".join(dong)
 
 
 def gui(hook, noi_dung):
@@ -80,6 +83,12 @@ def tu_kiem():
     assert "[**A**](u1)" in tin(loc(d, 0, 300))
     assert loc({"events": [{"timesort": 1, "name": "X"}]}, 0, 9) == [(1, "X", "", "")]
     assert "**X**" in tin(loc({"events": [{"timesort": 1, "name": "X"}]}, 0, 9))
+    # Tag đứng đầu tin thì Discord mới đẩy thông báo; nằm giữa cũng ping nhưng
+    # dòng đầu là thứ hiện trên màn hình khóa.
+    os.environ["DISCORD_TAG"] = "<@1>"
+    assert tin(loc(d, 0, 300)).startswith("<@1> ⏰")
+    del os.environ["DISCORD_TAG"]
+    assert tin(loc(d, 0, 300)).startswith("⏰")
     try:
         loc({"exception": "x", "message": "hỏng"}, 0, 9)
     except SystemExit:
