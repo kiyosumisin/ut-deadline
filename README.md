@@ -90,7 +90,7 @@ Sửa trong `.github/workflows/deadline.yml`:
 
 | Biến | Mặc định | Nghĩa |
 |---|---|---|
-| `NGAY_TRUOC` | `"7"` | nhìn trước bao nhiêu ngày |
+| `NGAY_TRUOC` | `"1"` | nhìn trước bao nhiêu ngày |
 | `cron` | `0 0,12 * * *` | giờ chạy theo UTC — `0,12` = 07:00 và 19:00 giờ VN |
 
 Hai tag nằm ở Secrets chứ không ở file này, xem bảng bước 4.
@@ -138,9 +138,12 @@ mà không ai biết — kiểu hỏng tệ nhất cho thứ cài để khỏi p
 - GitHub tắt lịch sau 60 ngày repo không có commit. Vào Actions bấm Run
   workflow một phát là sống lại.
 - Cùng một deadline được nhắc lại **mỗi lần chạy** cho tới khi qua hạn. Với
-  `NGAY_TRUOC=7` và 2 lần/ngày thì một deadline bị nhắc tới 14 lần. Cố ý —
-  nhắc một lần rồi thôi thì đúng hôm bận là trôi mất. Thấy loãng thì giảm
-  `NGAY_TRUOC` trước khi nghĩ tới chuyện chống trùng.
+  `NGAY_TRUOC=1` và 2 lần/ngày thì mỗi deadline được nhắc 2 lần, cách nhau
+  12 tiếng. Cố ý không chống trùng: nhắc một lần rồi thôi thì đúng lúc bận là
+  trôi mất.
+- Cửa sổ 1 ngày biến bot thành **chuông báo gấp**, không phải công cụ lên kế
+  hoạch. Bài lớn thầy giao trước cả tuần thì tối hôm trước mới nghe thấy. Cần
+  nhìn xa thì tăng `NGAY_TRUOC`, đổi lại mỗi deadline bị nhắc nhiều lần hơn.
 
 ## Riêng tư
 

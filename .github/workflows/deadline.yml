@@ -16,7 +16,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
-          NGAY_TRUOC: "7"
+          NGAY_TRUOC: "1"
           # Tag để tin nhắn đẩy được thông báo. Để trong Secrets chứ không viết
           # thẳng vào đây: người fork khỏi phải sửa file, và ID cá nhân không
           # nằm trong repo public. Không đặt thì không tag ai.
