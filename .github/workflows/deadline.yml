@@ -1,0 +1,16 @@
+name: deadline
+on:
+  schedule:
+    - cron: "0 0 * * *"        # 07:00 giờ VN
+  workflow_dispatch:            # bấm tay, và giữ lịch sống qua mốc 60 ngày
+jobs:
+  bao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python deadline.py --tu-kiem
+      - run: python deadline.py
+        env:
+          MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          NGAY_TRUOC: "3"
