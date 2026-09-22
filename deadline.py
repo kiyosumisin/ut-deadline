@@ -58,9 +58,11 @@ def tin(ds):
 
 
 def gui(hook, noi_dung):
+    # Discord cũng núp sau Cloudflare và cũng trả 403 cho UA mặc định của urllib.
+    # Cùng lý do với UA ở trên, khác nhà. Xóa một trong hai là hỏng một đầu.
     urllib.request.urlopen(urllib.request.Request(
         hook, json.dumps({"content": noi_dung}).encode(),
-        {"Content-Type": "application/json"}), timeout=30)
+        {"Content-Type": "application/json", "User-Agent": UA}), timeout=30)
 
 
 def tu_kiem():
