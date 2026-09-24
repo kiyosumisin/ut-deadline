@@ -1,6 +1,6 @@
 # UT Deadline
 
-Sáng 7h gửi bản tin 7 ngày tới, tối 7h gửi chuông báo 24h tới — lấy từ `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
+Sáng gửi bản tin 7 ngày tới, tối gửi chuông báo 24h tới — lấy từ `courses.ut.edu.vn` (Moodle của UTH) rồi đẩy
 vào Discord hoặc Telegram. Chạy bằng GitHub Actions, không cần server, không cần
 máy bạn bật.
 
@@ -82,7 +82,7 @@ ngay thay vì lặng lẽ xanh.
 
 **Actions** → `deadline` → **Run workflow**. Log in `N deadline -> discord`.
 
-Xong. 07:00 và 19:00 mỗi ngày nó tự chạy.
+Xong. Sáng và tối mỗi ngày nó tự chạy.
 
 ## Chỉnh
 
@@ -90,13 +90,13 @@ Sửa trong `.github/workflows/deadline.yml`:
 
 | Biến | Mặc định | Nghĩa |
 |---|---|---|
-| `cron` | `0 0` và `0 12` | giờ chạy theo UTC = 07:00 và 19:00 giờ VN |
+| `cron` | `43 23` và `43 11` | giờ chạy theo UTC = 06:43 và 18:43 giờ VN |
 | `NGAY_TRUOC` | `7` sáng, `1` tối | nhìn trước bao nhiêu ngày |
 
 Cửa sổ đổi theo nhịp: nhịp tối nhìn 1 ngày, nhịp sáng và bấm tay nhìn 7 ngày.
 
 ```yaml
-NGAY_TRUOC: ${{ github.event.schedule == '0 12 * * *' && '1' || '7' }}
+NGAY_TRUOC: ${{ github.event.schedule == '43 11 * * *' && '1' || '7' }}
 ```
 
 Chuỗi cron trong dòng đó phải khớp **từng ký tự** với dòng `cron` bên trên. Lệch
@@ -145,7 +145,9 @@ mà không ai biết — kiểu hỏng tệ nhất cho thứ cài để khỏi p
   thứ tự thời gian tăng dần nên hạn gấp nhất luôn còn; mất là mất mấy cái xa
   nhất. Quá 10 sự kiện trong `NGAY_TRUOC` ngày thì đổi sang
   `core_calendar_get_calendar_monthly_view`.
-- Cron GitHub hay trễ 5–30 phút, lúc đông có khi bỏ một nhịp.
+- Cron GitHub **chỉ trễ, không bao giờ sớm**, và khung tròn giờ thì trễ rất
+  nặng: `0 0 * * *` đo được chạy lúc 10:24–10:57 VN thay vì 07:00, ba hôm
+  liền. Nên hẹn ở phút lẻ, tránh 00:00 UTC, và hẹn sớm hơn giờ mong muốn.
 - GitHub tắt lịch sau 60 ngày repo không có commit. Vào Actions bấm Run
   workflow một phát là sống lại.
 - Bot **không nhớ đã gửi gì**, mỗi lần chạy liệt kê lại toàn bộ cửa sổ. Nên một
