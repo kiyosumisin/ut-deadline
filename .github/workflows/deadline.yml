@@ -2,8 +2,12 @@ name: deadline
 on:
   schedule:
     # Hai nhịp, hai mục đích khác nhau — cron tính theo UTC, +7 ra giờ VN.
-    - cron: "0 0 * * *"         # 07:00 VN — bản tin tuần, để lên kế hoạch
-    - cron: "0 12 * * *"        # 19:00 VN — chuông báo gấp, đêm nay phải nộp gì
+    # TRÁNH phút 00 và tránh 00:00 UTC: đó là khung ai cũng hẹn, hàng chờ dồn
+    # lại làm trễ hàng tiếng. Đo thật: "0 0 * * *" chạy lúc 10:24-10:57 VN thay
+    # vì 07:00, lệch đều hơn 3 tiếng rưỡi ba hôm liền.
+    # Hẹn sớm hơn mong muốn một chút, vì cron chỉ trễ chứ không bao giờ sớm.
+    - cron: "43 23 * * *"       # 06:43 VN — bản tin tuần, để lên kế hoạch
+    - cron: "43 11 * * *"       # 18:43 VN — chuông báo gấp, đêm nay phải nộp gì
   workflow_dispatch:            # bấm tay, và giữ lịch sống qua mốc 60 ngày
 jobs:
   bao:
@@ -21,7 +25,7 @@ jobs:
           # Cửa sổ tùy nhịp: nhịp tối nhìn 1 ngày, còn lại (nhịp sáng và bấm
           # tay) nhìn 7 ngày. Chuỗi cron ở đây phải khớp TỪNG KÝ TỰ với dòng
           # cron bên trên, lệch một dấu cách là lẳng lặng rơi về 7.
-          NGAY_TRUOC: ${{ github.event.schedule == '0 12 * * *' && '1' || '7' }}
+          NGAY_TRUOC: ${{ github.event.schedule == '43 11 * * *' && '1' || '7' }}
           # Tag để tin nhắn đẩy được thông báo. Để trong Secrets chứ không viết
           # thẳng vào đây: người fork khỏi phải sửa file, và ID cá nhân không
           # nằm trong repo public. Không đặt thì không tag ai.
