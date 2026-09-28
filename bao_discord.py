@@ -16,6 +16,9 @@ def tin(ds):
     # Đọc env tại chỗ chứ không ở đầu file, để tu_kiem() bật tắt được.
     ngay = os.environ.get("NGAY_TRUOC", "3")
     tag = os.environ.get("DISCORD_TAG", "").strip()
+    # Rỗng thì KHÔNG tag: báo yên tâm mà cũng rung điện thoại thì phản tác dụng.
+    if not ds:
+        return f"✅ Không có deadline nào trong {ngay} ngày tới."
     return ((tag + " ") if tag else "") + \
         f"⏰ {len(ds)} deadline trong {ngay} ngày tới:\n" + "\n".join(dong)
 
@@ -36,6 +39,13 @@ def gui(ds, now):
 
 
 def tu_kiem():
+    # Rỗng thì nói một câu yên tâm, và không tag để khỏi rung điện thoại vô cớ.
+    os.environ["DISCORD_TAG"] = "<@1>"
+    try:
+        assert tin([]).startswith("✅"), tin([])
+        assert "<@1>" not in tin([])
+    finally:
+        del os.environ["DISCORD_TAG"]
     d = [(100, "A", "M1", "u1"), (200, "B", "M2", "")]
     assert "[**A**](u1)" in tin(d)
     assert "**B**" in tin(d) and "](" not in tin(d).split("\n")[2]   # không url -> in đậm

@@ -24,6 +24,9 @@ def tin(ds, now):
         dong.append(f"• {nhan} — {_esc(mon)} — {gio} ({khi})")
     ngay = os.environ.get("NGAY_TRUOC", "3")
     tag = os.environ.get("TELEGRAM_TAG", "").strip()
+    # Rỗng thì KHÔNG tag: báo yên tâm mà cũng rung điện thoại thì phản tác dụng.
+    if not ds:
+        return f"✅ Không có deadline nào trong {_esc(ngay)} ngày tới."
     return _esc((tag + " ") if tag else "") + \
         f"⏰ {len(ds)} deadline trong {_esc(ngay)} ngày tới:\n" + "\n".join(dong)
 
@@ -43,6 +46,13 @@ def gui(ds, now):
 
 
 def tu_kiem():
+    # Rỗng thì nói một câu yên tâm, và không tag để khỏi rung điện thoại vô cớ.
+    os.environ["TELEGRAM_TAG"] = "@ai_do"
+    try:
+        assert tin([], 0).startswith("✅"), tin([], 0)
+        assert "@ai_do" not in tin([], 0)
+    finally:
+        del os.environ["TELEGRAM_TAG"]
     t = tin([(0, "A<b>&", "M&M", "u?x=1&y=2")], 0)
     assert "A&lt;b&gt;&amp;" in t and "M&amp;M" in t, t
     assert 'href="u?x=1&amp;y=2"' in t, t

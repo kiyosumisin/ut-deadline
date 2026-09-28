@@ -26,6 +26,9 @@ jobs:
           # tay) nhìn 7 ngày. Chuỗi cron ở đây phải khớp TỪNG KÝ TỰ với dòng
           # cron bên trên, lệch một dấu cách là lẳng lặng rơi về 7.
           NGAY_TRUOC: ${{ github.event.schedule == '43 11 * * *' && '1' || '7' }}
+          # Nhịp tối nói cả khi không có gì. Nhịp sáng thì im, vì bản tin tuần
+          # rỗng là chuyện thường và không cần xác nhận.
+          BAO_CA_KHI_RONG: ${{ github.event.schedule == '43 11 * * *' && '1' || '' }}
           # Tag để tin nhắn đẩy được thông báo. Để trong Secrets chứ không viết
           # thẳng vào đây: người fork khỏi phải sửa file, và ID cá nhân không
           # nằm trong repo public. Không đặt thì không tag ai.

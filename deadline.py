@@ -93,7 +93,12 @@ if __name__ == "__main__":
 
     now = int(time.time())
     ds = loc(goi(os.environ["MOODLE_TOKEN"]), now, now + NGAY_TRUOC * 86400)
-    da_gui = [m.TEN for m in DICH if ds and m.gui(ds, now)]
+    # Im lặng có hai nghĩa — "cron không chạy" và "chạy mà không có deadline" —
+    # nhìn từ ngoài y hệt nhau. Nhịp chuông báo bật cờ này để luôn nói một câu,
+    # nhờ đó im lặng chỉ còn đúng một nghĩa: nhịp đó không chạy.
+    bao_rong = os.environ.get("BAO_CA_KHI_RONG", "").strip() == "1"
+    nen_gui = bool(ds) or bao_rong
+    da_gui = [m.TEN for m in DICH if nen_gui and m.gui(ds, now)]
     # In cả cửa sổ: workflow đổi NGAY_TRUOC theo nhịp cron, nhìn log mới biết
     # nhịp nào vừa chạy và nó có nhận đúng giá trị không.
     print(f"{len(ds)} deadline (cua so {NGAY_TRUOC} ngay) "
