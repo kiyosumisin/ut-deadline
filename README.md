@@ -153,9 +153,14 @@ mà không ai biết — kiểu hỏng tệ nhất cho thứ cài để khỏi p
   | `43 23` | 01:49 · 02:01 · 01:55 | ~2h10 |
   | `43 11` | 15:55 · 15:06 · 15:48 | ~3h50 |
 
-  Nên **hẹn sớm hơn giờ mong muốn đúng bằng mức trễ đo được**. Chạy sớm vô hại
-  vì cửa sổ tính từ lúc chạy; chạy muộn mới hỏng — chuông báo tối từng kêu lúc
-  22:50 cho deadline 23:00. Đổi giờ thì đo lại vài hôm rồi chỉnh tiếp.
+  Đo tiếp 28–29/09 thì cùng nhịp đó trễ 3h27 và 8h36 — nên **đừng cố canh giờ
+  đến**, mức trễ không ổn định đủ để bù. Giờ hẹn hiện tại chỉ là bù thô.
+
+  Thứ chữa được là **nội dung**: cửa sổ neo vào 23:59 giờ VN của ngày cuối
+  (`het_ngay()` trong `deadline.py`), không neo vào lúc chạy. Nhờ vậy chạy
+  15:07 hay 23:43 cũng ra cùng một danh sách. Trước khi neo, chạy sớm bỏ sót
+  deadline 20:00 hôm sau còn chạy muộn thì bắt được — cùng một ngày, hai kết
+  quả khác nhau.
 - GitHub tắt lịch sau 60 ngày repo không có commit. Vào Actions bấm Run
   workflow một phát là sống lại.
 - Bot **không nhớ đã gửi gì**, mỗi lần chạy liệt kê lại toàn bộ cửa sổ. Nên một

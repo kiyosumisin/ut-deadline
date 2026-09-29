@@ -4,7 +4,7 @@
 Phần Moodle nằm ở đây vì cả hai đích dùng chung. Định dạng và cách gửi thì
 mỗi nhà một kiểu nên tách riêng: bao_discord.py, bao_telegram.py.
 """
-import os, sys, json, time, urllib.request, urllib.parse
+import os, sys, json, time, datetime as dt, urllib.request, urllib.parse
 import bao_discord, bao_telegram
 
 DICH = (bao_discord, bao_telegram)
@@ -16,6 +16,19 @@ API = "https://courses.ut.edu.vn/webservice/rest/server.php"
 # viên soi log họ thấy ngay đây là ai, chạy cái gì, chứ không phải một trình duyệt lạ.
 UA = "UT-Deadline/1.0 (doc lich ca nhan qua Moodle web service)"
 NGAY_TRUOC = int(os.environ.get("NGAY_TRUOC", "3"))
+VN = dt.timezone(dt.timedelta(hours=7))
+
+
+def het_ngay(ts):
+    """Mốc 23:59:59 giờ VN của ngày chứa ts.
+
+    Cron GitHub trễ bao nhiêu là chuyện của GitHub — đo được 2h10 tới 8h36 trên
+    cùng một nhịp. Nếu cửa sổ tính từ lúc chạy thì chạy sớm hay muộn ra hai danh
+    sách khác nhau: chạy 15:07 bỏ sót deadline 20:00 hôm sau, chạy 23:43 thì bắt
+    được. Neo vào hết ngày thì chạy giờ nào cũng cùng một kết quả.
+    """
+    d = dt.datetime.fromtimestamp(ts, VN).replace(hour=23, minute=59, second=59)
+    return int(d.timestamp())
 
 
 def goi(token):
@@ -69,6 +82,14 @@ def tu_kiem():
     assert [x[1] for x in loc(d, 0, 300)] == ["A", "C", "B"], loc(d, 0, 300)
     assert [x[1] for x in loc(d, 0, 999)] == ["A", "C", "B", "XA"]   # ngoài cửa sổ thì cắt
     assert loc({"events": [{"timesort": 1, "name": "X"}]}, 0, 9) == [(1, "X", "", "")]
+    # Cửa sổ phải độc lập với giờ chạy: hai lần chạy cùng ngày, cách nhau 8
+    # tiếng, phải ra cùng một mốc kết thúc.
+    som = int(dt.datetime(2026, 9, 29, 15, 7, tzinfo=VN).timestamp())
+    muon = int(dt.datetime(2026, 9, 29, 23, 43, tzinfo=VN).timestamp())
+    assert het_ngay(som + 86400) == het_ngay(muon + 86400), "cua so lech theo gio chay"
+    cuoi = dt.datetime.fromtimestamp(het_ngay(som + 86400), VN)
+    assert (cuoi.day, cuoi.hour, cuoi.minute) == (30, 23, 59), cuoi
+
     try:
         loc({"exception": "x", "message": "hỏng"}, 0, 9)
     except SystemExit:
@@ -92,7 +113,8 @@ if __name__ == "__main__":
                          "hoặc TELEGRAM_TOKEN kèm TELEGRAM_CHAT.")
 
     now = int(time.time())
-    ds = loc(goi(os.environ["MOODLE_TOKEN"]), now, now + NGAY_TRUOC * 86400)
+    den = het_ngay(now + NGAY_TRUOC * 86400)
+    ds = loc(goi(os.environ["MOODLE_TOKEN"]), now, den)
     # Im lặng có hai nghĩa — "cron không chạy" và "chạy mà không có deadline" —
     # nhìn từ ngoài y hệt nhau. Nhịp chuông báo bật cờ này để luôn nói một câu,
     # nhờ đó im lặng chỉ còn đúng một nghĩa: nhịp đó không chạy.
